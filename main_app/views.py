@@ -20,7 +20,7 @@ dinos = [
 
 
 def home(request):
-    return HttpResponse('<h1>Home View</h1>')
+    return render(request,'home.html')
 
 
 def about(request):
