@@ -8,3 +8,8 @@ def home(request):
 
 def about(request):
   return render(request, 'about.html')
+
+def dinos_index(request):
+  return render(request, 'dinos/index.html', { 
+      'dinos': dinos 
+    })  
