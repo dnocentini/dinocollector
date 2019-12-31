@@ -5,12 +5,14 @@
 
 {% for dino in dinos %}
 <div class="card">
-    <div class="card-content">
-        <span class="card-title">{{ dino.name }}</span>
-        <p>Nickname: {{ dino.nickname }}</p>
-        <p>Description: {{ dino.description }}</p>
-        <p>Era: {{ dino.era }}</p>
-    </div>
+    <a href="{% url 'detail' dino.id %}">
+        <div class="card-content">
+            <span class="card-title">{{ dino.name }}</span>
+            <p>Nickname: {{ dino.nickname }}</p>
+            <p>Description: {{ dino.description }}</p>
+            <p>Era: {{ dino.era }}</p>
+        </div>
+    </a>    
 </div>
 {% endfor %}
 

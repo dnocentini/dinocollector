@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from .models import Dino
 
+
 def home(request):
-    return render(request,'home.html')
+    return render(request, 'home.html')
 
 
 def about(request):
@@ -11,4 +12,9 @@ def about(request):
 
 def dinos_index(request):
     dinos = Dino.objects.all()
-    return render(request, 'dinos/index.html', { 'dinos': dinos })
+    return render(request, 'dinos/index.html', {'dinos': dinos})
+
+
+def dinos_detail(request, dino_id):
+    dino = Dino.objects.get(id=dino_id)
+    return render(request, 'dinos/detail.html', {'dino': dino})

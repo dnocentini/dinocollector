@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Dino Details</h1>
+
+<div class="card">
+  <div class="card-content">
+    <span class="card-title">{{ dino.name }}</span>
+    <p>Breed: {{ dino.nickname }}</p>
+    <p>Description: {{ dino.description }}</p>
+    <p>Age: {{ dino.era }}</p>
+  </div>
+</div>
+
+{% endblock %}
