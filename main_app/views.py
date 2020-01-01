@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.views.generic.edit import CreateView
 from .models import Dino
 
 
@@ -18,3 +19,8 @@ def dinos_index(request):
 def dinos_detail(request, dino_id):
     dino = Dino.objects.get(id=dino_id)
     return render(request, 'dinos/detail.html', {'dino': dino})
+
+class DinoCreate(CreateView):
+  model = Dino
+  fields = '__all__'
+  
