@@ -9,4 +9,5 @@ urlpatterns = [
     path('dinos/create/', views.DinoCreate.as_view(), name='dinos_create'),
     path('dinos/<int:pk>/update/', views.DinoUpdate.as_view(), name='dinos_update'),
     path('dinos/<int:pk>/delete/', views.DinoDelete.as_view(), name='dinos_delete'),
+    path('dinos/<int:dino_id>/add_feeding/', views.add_feeding, name='add_feeding'),
 ]
