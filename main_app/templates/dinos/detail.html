@@ -8,8 +8,14 @@
     <span class="card-title">{{ dino.name }}</span>
     <p>Breed: {{ dino.nickname }}</p>
     <p>Description: {{ dino.description }}</p>
-    <p>Age: {{ dino.era }}</p>
+    <p>Era: {{ dino.era }}</p>
   </div>
+  <div class="card-action">
+    <a href="{% url 'dinos_update' dino.id %}">Edit</a>
+    <a href="{% url 'dinos_delete' dino.id %}">Delete</a>
+  </div>
+
+
 </div>
 
 {% endblock %}

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Dino
 
 
@@ -23,4 +23,12 @@ def dinos_detail(request, dino_id):
 class DinoCreate(CreateView):
   model = Dino
   fields = '__all__'
+
+class DinoUpdate(UpdateView):
+  model = Dino
+  fields = ['nickname', 'description']
+
+class DinoDelete(DeleteView):
+  model = Dino
+  success_url = '/dinos/'  
   
