@@ -21,8 +21,10 @@ def dinos_index(request):
 def dinos_detail(request, dino_id):
     dino = Dino.objects.get(id=dino_id)
     feeding_form = FeedingForm()
+    rocks_dino_doesnt_have = Rock.objects.exclude(id__in = dino.rocks.all().values_list('id'))
     return render(request, 'dinos/detail.html', {
-        'dino': dino, 'feeding_form': feeding_form
+        'dino': dino, 'feeding_form': feeding_form,
+        'rocks': rocks_dino_doesnt_have
     })
 
 def add_feeding(request, dino_id):
@@ -61,5 +63,9 @@ class RockUpdate(UpdateView):
 
 class RockDelete(DeleteView):
     model = Rock
-    success_url = '/rocks/'   
+    success_url = '/rocks/'
+
+def assoc_rock(request, dino_id, rock_id):
+    Dino.objects.get(id=dino_id).rocks.add(rock_id)
+    return redirect('detail', dino_id=dino_id)       
   

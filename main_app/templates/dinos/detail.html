@@ -68,6 +68,28 @@
     <h5>No Rocks :(</h5>
     {% endif %}
   </div>
+  <div class="col s6">
+      <h3>Available Rocks</h3>
+      {% if rocks.count %}
+        {% for rock in rocks.all %}
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title">
+                A <span style="color: {{ rock.color }}">{{ rock.color }}</span> {{ rock.name }}
+              </span>
+            </div>
+            <div class="card-action">
+              <form action="{% url 'assoc_rock' dino.id rock.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn">Add</button>
+              </form>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <h5>{{dino.name}} Already Has All Rocks Available</h5>
+      {% endif %}
+    </div>
 </div>
 
 <script>
