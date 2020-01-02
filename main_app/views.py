@@ -1,8 +1,11 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
-from .models import Dino, Rock
 from .forms import FeedingForm
+
+import uuid
+import boto3
+from .models import Dino, Rock, Photo
 
 class DinoCreate(CreateView):
     model = Dino
@@ -72,4 +75,20 @@ class RockUpdate(UpdateView):
 class RockDelete(DeleteView):
     model = Rock
     success_url = '/rocks/'
+
+def add_photo(request, dino_id):
+    S3_BASE_URL = 'https://s3-us-west-1.amazonaws.com/'
+    BUCKET = 'dinocollector'
+    photo_file = request.FILES.get('photo-file', None)
+    if photo_file:
+        s3 = boto3.client('s3')
+        key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+        try:
+            s3.upload_fileobj(photo_file, BUCKET, key)
+            url = f"{S3_BASE_URL}{BUCKET}/{key}"
+            photo = Photo(url=url, dino_id=dino_id)
+            photo.save()
+        except:
+            print('An error occurred uploading file to S3')
+    return redirect('detail', dino_id=dino_id)
 
