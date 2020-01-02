@@ -10,8 +10,10 @@ urlpatterns = [
     path('dinos/<int:pk>/update/', views.DinoUpdate.as_view(), name='dinos_update'),
     path('dinos/<int:pk>/delete/', views.DinoDelete.as_view(), name='dinos_delete'),
     path('dinos/<int:dino_id>/add_feeding/', views.add_feeding, name='add_feeding'),
+  
     path('dinos/<int:dino_id>/assoc_rock/<int:rock_id>/', views.assoc_rock, name='assoc_rock'),
     path('dinos/<int:dino_id>/unassoc_rock/<int:rock_id>/', views.unassoc_rock, name='unassoc_rock'),
+  
     path('rocks/', views.RockList.as_view(), name='rocks_index'),
     path('rocks/<int:pk>/', views.RockDetail.as_view(), name='rocks_detail'),
     path('rocks/create/', views.RockCreate.as_view(), name='rocks_create'),

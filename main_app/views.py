@@ -4,6 +4,17 @@ from django.views.generic import ListView, DetailView
 from .models import Dino, Rock
 from .forms import FeedingForm
 
+class DinoCreate(CreateView):
+    model = Dino
+    fields = ['name', 'nickname', 'description', 'era']
+
+class DinoUpdate(UpdateView):
+    model = Dino
+    fields = ['nickname', 'description']
+
+class DinoDelete(DeleteView):
+    model = Dino
+    success_url = '/dinos/' 
 
 def home(request):
     return render(request, 'home.html')
@@ -20,8 +31,8 @@ def dinos_index(request):
 
 def dinos_detail(request, dino_id):
     dino = Dino.objects.get(id=dino_id)
-    feeding_form = FeedingForm()
     rocks_dino_doesnt_have = Rock.objects.exclude(id__in = dino.rocks.all().values_list('id'))
+    feeding_form = FeedingForm()
     return render(request, 'dinos/detail.html', {
         'dino': dino, 'feeding_form': feeding_form,
         'rocks': rocks_dino_doesnt_have
@@ -33,19 +44,16 @@ def add_feeding(request, dino_id):
         new_feeding = form.save(commit=False)
         new_feeding.dino_id = dino_id
         new_feeding.save()
-    return redirect('detail', dino_id=dino_id)   
+    return redirect('detail', dino_id=dino_id) 
 
-class DinoCreate(CreateView):
-    model = Dino
-    fields = '__all__'
+def assoc_rock(request, dino_id, rock_id):
+    Dino.objects.get(id=dino_id).rocks.add(rock_id)
+    return redirect('detail', dino_id=dino_id)  
 
-class DinoUpdate(UpdateView):
-    model = Dino
-    fields = ['nickname', 'description']
+def unassoc_rock(request, dino_id, rock_id):
+    Dino.objects.get(id=dino_id).rocks.remove(rock_id)
+    return redirect('detail', dino_id=dino_id)         
 
-class DinoDelete(DeleteView):
-    model = Dino
-    success_url = '/dinos/' 
 
 class RockList(ListView):
     model = Rock
@@ -65,11 +73,3 @@ class RockDelete(DeleteView):
     model = Rock
     success_url = '/rocks/'
 
-def assoc_rock(request, dino_id, rock_id):
-    Dino.objects.get(id=dino_id).rocks.add(rock_id)
-    return redirect('detail', dino_id=dino_id)  
-
-def unassoc_rock(request, dino_id, rock_id):
-    Dino.objects.get(id=dino_id).rocks.remove(rock_id)
-    return redirect('detail', dino_id=dino_id)         
-  

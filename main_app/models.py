@@ -43,7 +43,7 @@ class Feeding(models.Model):
         max_length=1,
         choices=MEALS,
         default=MEALS[0][0]
-        )
+    )
     dino = models.ForeignKey(Dino, on_delete=models.CASCADE)
 
     def __str__(self):
