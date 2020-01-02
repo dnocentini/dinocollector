@@ -67,5 +67,9 @@ class RockDelete(DeleteView):
 
 def assoc_rock(request, dino_id, rock_id):
     Dino.objects.get(id=dino_id).rocks.add(rock_id)
-    return redirect('detail', dino_id=dino_id)       
+    return redirect('detail', dino_id=dino_id)  
+
+def unassoc_rock(request, dino_id, rock_id):
+    Dino.objects.get(id=dino_id).rocks.remove(rock_id)
+    return redirect('detail', dino_id=dino_id)         
   
