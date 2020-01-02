@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Rock List</h1>
+
+{% for rock in rock_list %}
+  <a href="{% url 'rocks_detail' rock.id %}">
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">{{ rock.name }}</span>
+            <p>Color: {{ rock.color }}</p>
+        </div>
+    </div>
+  </a>
+{% endfor %}
+
+{% endblock %}

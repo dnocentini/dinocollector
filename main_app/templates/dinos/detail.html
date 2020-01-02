@@ -26,23 +26,47 @@
     </form>
     <br>
     {% if dino.fed_for_today %}
-      <div class="card-panel teal-text center-align">{{dino.name}} has been fed all meals for today</div>
+    <div class="card-panel teal-text center-align">{{dino.name}} has been fed all meals for today</div>
     {% else %}
-      <div class="card-panel red-text center-align">{{dino.name}} might be hungry</div>
+    <div class="card-panel red-text center-align">{{dino.name}} might be hungry</div>
     {% endif %}
     <table class="striped">
       <thead>
-        <tr><th>Date</th><th>Meal</th></tr>
+        <tr>
+          <th>Date</th>
+          <th>Meal</th>
+        </tr>
       </thead>
       <tbody>
         {% for feeding in dino.feeding_set.all %}
-          <tr>
-            <td>{{feeding.date}}</td>
-            <td>{{feeding.get_meal_display}}</td>
-          </tr>
+        <tr>
+          <td>{{feeding.date}}</td>
+          <td>{{feeding.get_meal_display}}</td>
+        </tr>
         {% endfor %}
       </tbody>
     </table>
+  </div>
+</div>
+
+<hr>
+
+<div class="row">
+  <div class="col s6">
+    <h3>{{ dino.name }}'s Rocks</h3>
+    {% if dino.rocks.count %}
+    {% for rock in dino.rocks.all %}
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">
+          A <span style="color: {{ rock.color }}">{{ rock.color }}</span> {{ rock.name }}
+        </span>
+      </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <h5>No Rocks :(</h5>
+    {% endif %}
   </div>
 </div>
 
@@ -59,4 +83,4 @@
   M.FormSelect.init(selectEl);
 </script>
 
-{% endblock %}
+  {% endblock %}
