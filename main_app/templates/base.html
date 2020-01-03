@@ -20,8 +20,16 @@
         </ul>
         <ul class="right">
           <li><a href="{% url 'about' %}">About</a></li>
-          <li><a href="{% url 'dinos_create' %}">Add a Dino</a></li>
-          <li><a href="{% url 'index' %}">View All My Dinos</a></li>
+          {% if user.is_authenticated %}
+            <li><a href="{% url 'rocks_create' %}">Add a Rock</a></li>
+            <li><a href="{% url 'rocks_index' %}">View All Rocks</a></li>
+            <li><a href="{% url 'dinos_create' %}">Add a Dino</a></li>
+            <li><a href="{% url 'index' %}">View All My Dinos</a></li>
+            <li><a href="{% url 'logout' %}">Log Out</a></li>
+          {% else %}
+          <li><a href="{% url 'signup' %}">Sign Up</a></li>
+            <li><a href="{% url 'login' %}">Log In</a></li>
+          {% endif %}
         </ul>
       </div>
     </nav>

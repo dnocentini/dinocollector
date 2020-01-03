@@ -21,4 +21,5 @@ urlpatterns = [
     path('rocks/create/', views.RockCreate.as_view(), name='rocks_create'),
     path('rocks/<int:pk>/update/', views.RockUpdate.as_view(), name='rocks_update'),
     path('rocks/<int:pk>/delete/', views.RockDelete.as_view(), name='rocks_delete'),
+    path('accounts/signup/', views.signup, name='signup'),
 ]

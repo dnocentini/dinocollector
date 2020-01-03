@@ -1,21 +1,43 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
-from .forms import FeedingForm
-
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 import uuid
 import boto3
 from .models import Dino, Rock, Photo
+from .forms import FeedingForm
 
-class DinoCreate(CreateView):
+def signup(request):
+    error_message = ''
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('index')
+        else:
+            error_message = 'Invalid credentials - try again'
+    form = UserCreationForm()
+    context = {'form': form, 'error_message': error_message}
+    return render(request, 'registration/signup.html', context)
+
+
+class DinoCreate(LoginRequiredMixin, CreateView):
     model = Dino
     fields = ['name', 'nickname', 'description', 'era']
 
-class DinoUpdate(UpdateView):
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+class DinoUpdate(LoginRequiredMixin, UpdateView):
     model = Dino
     fields = ['nickname', 'description']
 
-class DinoDelete(DeleteView):
+class DinoDelete(LoginRequiredMixin, DeleteView):
     model = Dino
     success_url = '/dinos/' 
 
@@ -26,12 +48,12 @@ def home(request):
 def about(request):
     return render(request, 'about.html')
 
-
+@login_required
 def dinos_index(request):
-    dinos = Dino.objects.all()
+    dinos = Dino.objects.filter(user=request.user)
     return render(request, 'dinos/index.html', {'dinos': dinos})
 
-
+@login_required
 def dinos_detail(request, dino_id):
     dino = Dino.objects.get(id=dino_id)
     rocks_dino_doesnt_have = Rock.objects.exclude(id__in = dino.rocks.all().values_list('id'))
@@ -41,6 +63,7 @@ def dinos_detail(request, dino_id):
         'rocks': rocks_dino_doesnt_have
     })
 
+@login_required
 def add_feeding(request, dino_id):
     form = FeedingForm(request.POST)
     if form.is_valid():
@@ -49,33 +72,36 @@ def add_feeding(request, dino_id):
         new_feeding.save()
     return redirect('detail', dino_id=dino_id) 
 
+@login_required
 def assoc_rock(request, dino_id, rock_id):
     Dino.objects.get(id=dino_id).rocks.add(rock_id)
     return redirect('detail', dino_id=dino_id)  
 
+@login_required
 def unassoc_rock(request, dino_id, rock_id):
     Dino.objects.get(id=dino_id).rocks.remove(rock_id)
     return redirect('detail', dino_id=dino_id)         
 
 
-class RockList(ListView):
+class RockList(LoginRequiredMixin, ListView):
     model = Rock
 
-class RockDetail(DetailView):
+class RockDetail(LoginRequiredMixin, DetailView):
     model = Rock
 
-class RockCreate(CreateView):
+class RockCreate(LoginRequiredMixin, CreateView):
     model = Rock
     fields = '__all__'
 
-class RockUpdate(UpdateView):
+class RockUpdate(LoginRequiredMixin, UpdateView):
     model = Rock
     fields = ['name', 'color']
 
-class RockDelete(DeleteView):
+class RockDelete(LoginRequiredMixin, DeleteView):
     model = Rock
     success_url = '/rocks/'
 
+@login_required
 def add_photo(request, dino_id):
     S3_BASE_URL = 'https://s3-us-west-1.amazonaws.com/'
     BUCKET = 'dinocollector'
